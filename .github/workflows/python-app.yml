@@ -1,16 +1,19 @@
 name: Python application
+run-name: ${{ github.actor }} is testing HNG Fast-api 🚀
 
 on:
   push:
-    branches: [ "main" ]
+    branches:
+      - "feature-branch"
   pull_request:
-    branches: [ "main" ]
+    branches:
+      - "main"
 
 permissions:
   contents: read
 
 jobs:
-  build:
+  test:
 
     runs-on: ubuntu-latest
 

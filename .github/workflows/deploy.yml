@@ -21,8 +21,6 @@ jobs:
 
     - name: Check out repository code
       uses: actions/checkout@v4
-      with:
-        ssh-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
     - name: Set up Python 3.10
       uses: actions/setup-python@v3

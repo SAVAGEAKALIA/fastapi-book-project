@@ -66,10 +66,10 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          docker load -i /home/ubuntu/my-image.tar.gz
-          docker stop my-container || true
-          docker rm my-container || true
-          docker run -d --name my-container -p 8000:8000 my-image
+          sudo docker load -i /home/ubuntu/my-image.tar.gz
+          sudo docker stop my-container || true
+          sudo docker rm my-container || true
+          sudo docker run -d --name my-container -p 8000:8000 my-image
 
     - name: Configure Nginx
       uses: appleboy/ssh-action@v0.1.3

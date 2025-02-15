@@ -32,7 +32,7 @@ jobs:
 
     - name: Save Docker Image as Tar file
       run: |
-        docker save my-image -o my-image.tar.gz
+        docker save -o my-image.tar.gz my-image
 
     - name: Upload Docker Image to Server
       uses: appleboy/scp-action@v0.1.3
@@ -66,9 +66,12 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          ls -lh /home/ubuntu/my-image.tar.gz
+          file /home/ubuntu/my-image.tar.gz
           sudo docker load -i /home/ubuntu/my-image.tar.gz
           sudo docker stop my-container || true
           sudo docker rm my-container || true
+          sudo docker images | grep my-image
           sudo docker run -d --name my-container -p 8000:8000 my-image
 
     - name: Configure Nginx

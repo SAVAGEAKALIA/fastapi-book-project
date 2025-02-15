@@ -68,7 +68,7 @@ jobs:
         script: |
           ls -lh /home/ubuntu/my-image.tar.gz
           file /home/ubuntu/my-image.tar.gz
-          sudo docker load -i /home/ubuntu/my-image.tar.gz
+          sudo docker load < /home/ubuntu/my-image.tar.gz
           sudo docker stop my-container || true
           sudo docker rm my-container || true
           sudo docker images | grep my-image

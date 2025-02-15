@@ -18,7 +18,6 @@ jobs:
     - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
     - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
 
-
     - name: Check out repository code
       uses: actions/checkout@v4
 
@@ -36,7 +35,7 @@ jobs:
         docker save my-image -o my-image.tar.gz
 
     - name: Upload Docker Image to Server
-      uses: appleboy/scp-action@master
+      uses: appleboy/scp-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -45,7 +44,7 @@ jobs:
         target: /home/ubuntu/my-image.tar.gz
 
     - name: Install Docker on Server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -59,7 +58,7 @@ jobs:
           fi
 
     - name: Load Docker Image on Server
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
@@ -71,7 +70,7 @@ jobs:
           docker run -d --name my-container -p 8000:8000 my-image
 
     - name: Configure Nginx
-      uses: appleboy/ssh-action@master
+      uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}

@@ -56,6 +56,8 @@ jobs:
             sudo systemctl start docker
             sudo systemctl enable docker
           fi
+          sudo usermod -aG docker $USER
+          newgrp docker
 
     - name: Load Docker Image on Server
       uses: appleboy/ssh-action@v0.1.3

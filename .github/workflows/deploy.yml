@@ -11,30 +11,20 @@ permissions:
 
 jobs:
   deploy:
+    name: Deploy Application
     runs-on: ubuntu-latest
 
     steps:
-    - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-    - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-    - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-
-    - name: Check out repository code
+    - name: Checkout Repository
       uses: actions/checkout@v4
 
-    - name: Set up Python 3.10
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.10"
-
     - name: Build Docker Image
-      run: |
-        docker build -t my-image .
+      run: docker build -t my-image .
 
-    - name: Save Docker Image as Tar file
-      run: |
-        docker save -o my-image.tar.gz my-image
+    - name: Save Docker Image as Tar
+      run: docker save -o my-image.tar.gz my-image
 
-    - name: Remove existing image directory on Server (if any)
+    - name: Clean Remote Image File (if exists)
       uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
@@ -42,7 +32,6 @@ jobs:
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
           rm -rf /home/ubuntu/my-image.tar.gz
-
 
     - name: Upload Docker Image to Server
       uses: appleboy/scp-action@v0.1.3
@@ -53,23 +42,23 @@ jobs:
         source: my-image.tar.gz
         target: /home/ubuntu/
 
-    - name: Install and Load Docker Image on Server
+    - name: Deploy Docker Image on Server
       uses: appleboy/ssh-action@v0.1.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
+          # Install Docker if not already installed
           if ! command -v docker > /dev/null; then
-            sudo apt update
-            sudo apt install -y docker.io
+            sudo apt update && sudo apt install -y docker.io
             sudo systemctl start docker
             sudo systemctl enable docker
           fi
+          # Load the image, force-remove any existing container, and run the new container
           sudo docker load -i /home/ubuntu/my-image.tar.gz
-          sudo docker stop my-container || true
-          sudo docker rm my-container || true
+          sudo docker rm -f my-container || true
           sudo docker run -d --name my-container -p 8000:8000 my-image
 
-    - run: echo "🧪 Deployment completed."
-    - run: echo "🍏 This job's status is ${{ job.status }}."
+    - name: Deployment Complete
+      run: echo "Deployment completed successfully."

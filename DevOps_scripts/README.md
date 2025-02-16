@@ -1,1 +1,0 @@
-DevOps stage 0 HNG - NGINX Configuration

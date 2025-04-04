@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 import undetected_chromedriver as uc  # Avoid bot detection
 
-# Configure Chrome to mimic human behavior
+# Configure Chrome to mimic human behavior xgj
 options = uc.ChromeOptions()
 options.add_argument("--disable-blink-features=AutomationControlled")
 options.add_argument("--start-maximized")
